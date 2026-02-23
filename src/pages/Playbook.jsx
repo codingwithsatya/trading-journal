@@ -1,5 +1,5 @@
 import React from 'react';
-import { PLAYBOOK_SETUPS, TypeTag } from '../data/playbook';
+import { PLAYBOOK_SETUPS } from '../data/playbook';
 import { TypeTag as TT } from '../components/UI';
 
 export default function Playbook({ trades }) {

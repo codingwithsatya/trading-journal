@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Btn } from '../components/UI';
+import { Card } from '../components/UI';
 import { PLAYBOOK_SETUPS, SETUPS_NAMES } from '../data/playbook';
 
 export default function SetupGrader() {

@@ -1,6 +1,6 @@
 # 📈 TradeFlow — Playbook Backtesting Journal
 
-A professional trading journal built with React, featuring your complete 7-setup playbook, grader, statistics, mindset tracker, and weekly reviews.
+A professional trading journal built with React, featuring your complete 7-setup playbook, grader, timezone‑aware statistics, visual charts (powered by **recharts**), mindset tracker, and weekly reviews.
 
 ---
 
