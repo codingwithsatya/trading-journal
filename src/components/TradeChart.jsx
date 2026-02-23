@@ -14,29 +14,6 @@ import {
 export default function TradeChart({ trades = [] }) {
   const [mode, setMode] = useState("daily");
 
-  const toMinutes = (timeStr) => {
-    if (!timeStr) return null;
-    const [h, m] = timeStr.split(":").map(Number);
-    if (isNaN(h) || isNaN(m)) return null;
-    return h * 60 + m;
-  };
-  const TZ_OFFSETS = { EST: -5, CST: -6, MST: -7, PST: -8 };
-  const baseOffset = TZ_OFFSETS["EST"];
-
-  // convert a trade's reported time and timezone into a minute count in the
-  // currently-selected view zone (assumes view zone is EST for this chart but
-  // we support per-trade timezone).
-  const convertTime = (t, viewTz = "EST") => {
-    const m = toMinutes(t.time);
-    if (m === null) return null;
-    const tradeOff = TZ_OFFSETS[t.tz || "EST"] || baseOffset;
-    const viewOff = TZ_OFFSETS[viewTz] || baseOffset;
-    // first bring to EST reference
-    const est = (m + (baseOffset - tradeOff) * 60 + 1440) % 1440;
-    // then shift to view zone
-    return (est + (viewOff - baseOffset) * 60 + 1440) % 1440;
-  };
-
   // ---------- daily view ----------
   const daily = trades.reduce((acc, t) => {
     const d = t.date || "unknown";

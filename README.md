@@ -120,7 +120,18 @@ That's it — your live site updates automatically.
 ---
 
 ## � Multi‑user & Authentication
-
+> ### Local deployment note
+>
+> The repository includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) which builds and deploys to GitHub Pages on every push to `main`.  You can rely on that instead of running `npm run deploy` locally.  If you do run the deploy script yourself, you'll need push permissions and (optionally) a personal access token:
+>
+> ```bash
+> # create a token with `repo` scope and store in GH_TOKEN
+> export GH_TOKEN=ghp_xxxxxx
+> npm run deploy
+> ```
+>
+> Also ensure the `gh-pages` branch is not protected in your repo settings – the `gh-pages` package force‑pushes there and a protected branch will return HTTP 400 errors.
+>
 This journal was originally built as a single‑user app using `localStorage`. For multiple traders or to keep your logs synced across devices, the repo now includes basic Firebase integration:
 
 - `src/firebase.js` – place your Firebase config here (requires `npm install firebase`).
