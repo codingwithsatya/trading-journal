@@ -39,4 +39,7 @@ jobs:
       - name: Deploy
         run: npm run deploy
         env:
+          # gh-pages reads GH_TOKEN for repo authentication; map GitHub Actions token
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # keep GITHUB_TOKEN available too if other steps rely on it
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
