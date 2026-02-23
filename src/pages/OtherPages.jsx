@@ -295,21 +295,29 @@ export function Statistics({ trades }) {
   // helper for timezone-conversion (assume original times are Eastern)
   const TZ_OFFSETS = { EST: -5, CST: -6, MST: -7, PST: -8 };
   const baseOffset = TZ_OFFSETS["EST"];
-  const offsetMinutes = ((TZ_OFFSETS[tz] || baseOffset) - baseOffset) * 60;
-
   const toMinutes = (timeStr) => {
     if (!timeStr) return null;
     const [h, m] = timeStr.split(":").map(Number);
     if (isNaN(h) || isNaN(m)) return null;
     return h * 60 + m;
   };
-  const localMinutes = (m) =>
-    m === null ? null : (m + offsetMinutes + 1440) % 1440;
   const formatMin = (m) => {
     if (m === null) return "--";
     const hh = Math.floor(m / 60);
     const mm = m % 60;
     return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+  };
+
+  // compute minute value for a trade in the selected view timezone
+  const tradeToViewMin = (trade) => {
+    const m = toMinutes(trade.time);
+    if (m === null) return null;
+    const tradeOff = TZ_OFFSETS[trade.tz || "EST"] || baseOffset;
+    const viewOff = TZ_OFFSETS[tz] || baseOffset;
+    // convert trade time to EST reference
+    const est = (m + (baseOffset - tradeOff) * 60 + 1440) % 1440;
+    // then shift into view tz
+    return (est + (viewOff - baseOffset) * 60 + 1440) % 1440;
   };
 
   const timeSlots = [
@@ -318,12 +326,14 @@ export function Statistics({ trades }) {
     { start: toMinutes("11:00"), end: toMinutes("12:30"), label: "" },
     { start: toMinutes("15:00"), end: toMinutes("16:00"), label: "Close" },
   ].map((slot) => {
-    const s = localMinutes(slot.start);
-    const e = localMinutes(slot.end);
+    // compute slot boundaries in view zone as well
+    const viewOff = TZ_OFFSETS[tz] || baseOffset;
+    const s = (slot.start + (viewOff - baseOffset) * 60 + 1440) % 1440;
+    const e = (slot.end + (viewOff - baseOffset) * 60 + 1440) % 1440;
     return {
       label: `${formatMin(s)}–${formatMin(e)}${slot.label ? " " + slot.label : ""} (${tz})`,
       check: (t) => {
-        const m = localMinutes(toMinutes(t.time));
+        const m = tradeToViewMin(t);
         return m !== null && m >= s && m < e;
       },
     };

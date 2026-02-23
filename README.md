@@ -1,35 +1,43 @@
 # 📈 TradeFlow — Playbook Backtesting Journal
 
-A professional trading journal built with React, featuring your complete 7-setup playbook, grader, timezone‑aware statistics, visual charts (powered by **recharts**), mindset tracker, and weekly reviews.
+A professional trading journal built with React, featuring your complete 7-setup playbook, grader, timezone‑aware statistics (with per‑trade zone support), visual charts (powered by **recharts**; daily/settup/P&L modes), mindset tracker, and weekly reviews.
 
 ---
 
 ## 🚀 Quick Start (Run Locally)
 
 ### Step 1 — Install Node.js
+
 Download and install Node.js (free): https://nodejs.org  
 Choose the **LTS version** (recommended).
 
 ### Step 2 — Open Terminal / Command Prompt
+
 - **Mac**: Press `Cmd + Space`, type "Terminal", press Enter
 - **Windows**: Press `Win + R`, type "cmd", press Enter
 
 ### Step 3 — Navigate to the project folder
+
 ```bash
 cd path/to/trading-journal
 ```
+
 (Replace `path/to` with the actual folder location, e.g. `cd Desktop/trading-journal`)
 
 ### Step 4 — Install dependencies
+
 ```bash
 npm install
 ```
+
 This downloads React and all required packages (~2 minutes).
 
 ### Step 5 — Start the app
+
 ```bash
 npm start
 ```
+
 The app will open automatically at **http://localhost:3000** in your browser. 🎉
 
 ---
@@ -39,26 +47,34 @@ The app will open automatically at **http://localhost:3000** in your browser. �
 This gives you a permanent URL like `https://yourusername.github.io/trading-journal`
 
 ### Step 1 — Create a free GitHub account
+
 Go to https://github.com and sign up (free).
 
 ### Step 2 — Create a new repository
+
 1. Click the **+** icon → **New repository**
 2. Name it: `trading-journal`
 3. Set to **Public**
 4. Click **Create repository**
 
 ### Step 3 — Update your homepage URL
+
 Open `package.json` and replace this line:
+
 ```json
 "homepage": "https://YOUR_GITHUB_USERNAME.github.io/trading-journal",
 ```
+
 With your actual GitHub username, e.g.:
+
 ```json
 "homepage": "https://john_trader.github.io/trading-journal",
 ```
 
 ### Step 4 — Push your code to GitHub
+
 In Terminal, inside your project folder:
+
 ```bash
 git init
 git add .
@@ -69,18 +85,22 @@ git push -u origin main
 ```
 
 ### Step 5 — Deploy to GitHub Pages
+
 ```bash
 npm run deploy
 ```
+
 This builds and publishes your app automatically.
 
 ### Step 6 — Enable GitHub Pages
+
 1. Go to your repository on GitHub
 2. Click **Settings** → **Pages** (left sidebar)
 3. Under **Branch**, select `gh-pages` → `/ (root)`
 4. Click **Save**
 
 ### Step 7 — Visit your live app! 🎉
+
 Go to: `https://YOUR_USERNAME.github.io/trading-journal`
 
 > ⏱ It may take 1–2 minutes for the site to go live the first time.
@@ -90,14 +110,31 @@ Go to: `https://YOUR_USERNAME.github.io/trading-journal`
 ## 🔄 Update Your App Later
 
 After making changes:
+
 ```bash
 npm run deploy
 ```
+
 That's it — your live site updates automatically.
 
 ---
 
-## 📂 Project Structure
+## � Multi‑user & Authentication
+
+This journal was originally built as a single‑user app using `localStorage`. For multiple traders or to keep your logs synced across devices, the repo now includes basic Firebase integration:
+
+- `src/firebase.js` – place your Firebase config here (requires `npm install firebase`).
+
+* `src/AuthProvider.jsx` – React context with Google sign‑in/out (with error handling).
+* `useStore` hook automatically namespaces data by `user.uid` and contains comments showing how to hook Firestore collections.
+* `App.js` top bar shows the current user and a sign in / sign out button.
+
+> **Popup errors**: if you see `auth/popup-blocked` or `auth/cancelled-popup-request`, the browser likely blocked the popup or the project hasn't listed your origin as an authorized domain. In the Firebase console go to **Authentication → Settings → Authorized domains** and add `localhost` (and `localhost:3000` if needed). Ensure pop‑ups are allowed or use `signInWithRedirect` instead.
+> When a user logs in, their trades/etc. are loaded from a separate key (`tf_trades_<UID>`) to avoid overlapping with other accounts. For real cloud sync, follow the commented Firestore snippets in `useStore.js`.
+
+> ❗️ You must create a Firebase project, enable Google Authentication, and create Firestore collections before the auth features work.
+
+## �📂 Project Structure
 
 ```
 trading-journal/
@@ -136,15 +173,15 @@ All trade data is stored in your **browser's localStorage** — no backend neede
 
 ## 🛠 Playbook Setups Included
 
-| Setup | Type | Condition |
-|-------|------|-----------|
-| 10 Min ORB | Breakout | Any — mark at 9:40am |
-| Vomy | Transition | Price crosses ribbon |
-| iVomy | Transition | Inverse Vomy |
-| Flag Into Ribbon | Trend | Pullback to ribbon |
-| Divergence From Extreme | Reversal | Range + oscillator div |
-| 1Min EOD Divergence | Reversal | 3–4pm end of day |
-| Tweezer Bottom | Reversal | Wicky Wicky pattern |
+| Setup                   | Type       | Condition              |
+| ----------------------- | ---------- | ---------------------- |
+| 10 Min ORB              | Breakout   | Any — mark at 9:40am   |
+| Vomy                    | Transition | Price crosses ribbon   |
+| iVomy                   | Transition | Inverse Vomy           |
+| Flag Into Ribbon        | Trend      | Pullback to ribbon     |
+| Divergence From Extreme | Reversal   | Range + oscillator div |
+| 1Min EOD Divergence     | Reversal   | 3–4pm end of day       |
+| Tweezer Bottom          | Reversal   | Wicky Wicky pattern    |
 
 ---
 
